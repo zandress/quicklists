@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { FormModalComponentModule } from '../shared/ui/form-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class HomeComponent {
   imports: [
     CommonModule,
     IonicModule,
+    FormModalComponentModule,
     RouterModule.forChild([
       {
         path: '',
