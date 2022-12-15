@@ -20,7 +20,11 @@ import { FormModalComponentModule } from '../shared/ui/form-modal.component';
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-modal [isOpen]="formModalIsOpen$ | async" [canDismiss]="true">
+      <ion-modal
+        [isOpen]="formModalIsOpen$ | async"
+        [canDismiss]="true"
+        (ionModalDidDismiss)="formModalIsOpen$.next(false)"
+      >
         <ng-template>
           <app-form-modal
             title="Create checklist"
