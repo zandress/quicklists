@@ -16,6 +16,11 @@ import { IonicModule, ModalController } from '@ionic/angular';
     <ion-header>
       <ion-toolbar>
         <ion-title>{{ title }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="dismiss()">
+            <ion-icon name="close" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
