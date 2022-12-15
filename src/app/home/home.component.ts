@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
@@ -30,6 +31,12 @@ import { FormModalComponentModule } from '../shared/ui/form-modal.component';
 })
 export class HomeComponent {
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
+
+  checklistForm = this.fb.group({
+    title: ['', Validators.required],
+  });
+
+  constructor(private fb: FormBuilder) {}
 }
 
 @NgModule({
