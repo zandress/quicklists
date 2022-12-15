@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-form-modal',
@@ -44,8 +44,16 @@ export class FormModalComponent {
 
   @Output() save = new EventEmitter<boolean>();
 
+  constructor(private modalCtrl: ModalController) {}
+
   handleSave() {
     this.save.emit(true);
+    this.dismiss();
+  }
+
+  dismiss() {
+    this.formGroup.reset();
+    this.modalCtrl.dismiss();
   }
 }
 
