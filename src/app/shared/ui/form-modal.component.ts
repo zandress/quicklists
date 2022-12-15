@@ -25,7 +25,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
     </ion-header>
 
     <ion-content>
-      <form [formGroup]="formGroup" ] (ngSubmit)="handleSave()">
+      <form [formGroup]="formGroup" (ngSubmit)="handleSave()">
         <ion-item *ngFor="let control of formGroup.controls | keyvalue">
           <ion-label position="stacked">{{ control.key }}</ion-label>
           <ion-input type="text" [formControlName]="control.key"></ion-input>
@@ -42,6 +42,13 @@ import { IonicModule, ModalController } from '@ionic/angular';
     </ion-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      :host {
+        height: 100%;
+      }
+    `,
+  ],
 })
 export class FormModalComponent {
   @Input() title!: string;
