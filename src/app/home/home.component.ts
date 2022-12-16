@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { ChecklistService } from '../shared/data-access/checklist.service';
 import { FormModalComponentModule } from '../shared/ui/form-modal.component';
+import { ChecklistListComponentModule } from './ui/checklist-list.component';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,10 @@ import { FormModalComponentModule } from '../shared/ui/form-modal.component';
       </ion-toolbar>
     </ion-header>
     <ion-content>
+      <app-checklist-list
+        *ngIf="checklist$ | async as checklists"
+        [checklists]="checklists"
+        ></app-checklist-list>
       <ion-modal
         [isOpen]="formModalIsOpen$ | async"
         [canDismiss]="true"
@@ -39,6 +44,8 @@ import { FormModalComponentModule } from '../shared/ui/form-modal.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
+checklist$ = this.checklistService.getChecklists();
+
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
 
   checklistForm = this.fb.nonNullable.group({
@@ -60,6 +67,7 @@ export class HomeComponent {
     CommonModule,
     IonicModule,
     FormModalComponentModule,
+    ChecklistListComponentModule,
     RouterModule.forChild([
       {
         path: '',
