@@ -2,6 +2,9 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, NgModule } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
+import { switchMap } from "rxjs";
+import { __param } from "tslib";
+import { ChecklistService } from "../shared/data-access/checklist.service";
 
 @Component({
   selector: 'app-checklist',
@@ -17,7 +20,16 @@ import { IonicModule } from "@ionic/angular";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChecklistComponent {
-  constructor(private route: ActivatedRoute) {}
+  checklist$ = this.route.paramMap.pipe(
+    switchMap((paramMap) =>
+      this.checklistService.getChecklistById(paramMap.get('id') as string)
+      )
+  );
+
+  constructor(
+    private route: ActivatedRoute,
+    private checklistService: ChecklistService
+  ) {}
 }
 
 @NgModule({
