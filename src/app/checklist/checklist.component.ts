@@ -3,22 +3,18 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { __param } from 'tslib';
 import { ChecklistService } from '../shared/data-access/checklist.service';
-import { FormModalComponentModule } from "../shared/ui/form-modal.component";
+import { Checklist } from '../shared/interfaces/checklist';
+import { FormModalComponentModule } from '../shared/ui/form-modal.component';
 import { ChecklistItemService } from './data-access/checklist-item.service';
 
 @Component({
   selector: 'app-checklist',
   template: `
-    <ng-container
-      *ngIf="{
-        checklist: (checklist$ | async)!,
-        formModalIsOpen: (formModalIsOpen$ | async)!
-      } as vm"
-    >
+    <ng-container *ngIf="vm$ | async as vm">
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
@@ -55,23 +51,38 @@ import { ChecklistItemService } from './data-access/checklist-item.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChecklistComponent {
-  formModalIsOpen$ = new BehaviorSubject<boolean>(false);
-
   checklistItemForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
   });
 
-  checklist$ = this.route.paramMap.pipe(
-    switchMap((paramMap) =>
-      this.checklistService.getChecklistById(paramMap.get('id') as string)
+  checklistAndItems$ = this.route.paramMap.pipe(
+    switchMap((params) =>
+      combineLatest([
+        this.checklistService
+          .getChecklistById(params.get('id') as string)
+          .pipe(filter((checklist): checklist is Checklist => !!checklist)),
+        this.checklistItemService.getItemsByChecklistId(
+          params.get('id') as string
+        ),
+      ])
     )
+  );
+
+  formModalIsOpen$ = new BehaviorSubject<boolean>(false);
+
+  vm$ = combineLatest([this.checklistAndItems$, this.formModalIsOpen$]).pipe(
+    map(([[checklist, items], formModalIsOpen]) => ({
+      checklist,
+      items,
+      formModalIsOpen,
+    }))
   );
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private checklistService: ChecklistService,
-    private checklistItemService: ChecklistItemService,
+    private checklistItemService: ChecklistItemService
   ) {}
 
   addChecklistItem(checklistId: string) {
@@ -83,17 +94,17 @@ export class ChecklistComponent {
 }
 
 @NgModule({
-    declarations: [ChecklistComponent],
-    imports: [
-        CommonModule,
-        IonicModule,
-        RouterModule.forChild([
-            {
-                path: '',
-                component: ChecklistComponent,
-            },
-        ]),
-        FormModalComponentModule
-    ]
+  declarations: [ChecklistComponent],
+  imports: [
+    CommonModule,
+    IonicModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        component: ChecklistComponent,
+      },
+    ]),
+    FormModalComponentModule,
+  ],
 })
 export class ChecklistComponentModule {}
