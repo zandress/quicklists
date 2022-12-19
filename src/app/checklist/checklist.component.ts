@@ -11,18 +11,25 @@ import { ChecklistService } from '../shared/data-access/checklist.service';
 @Component({
   selector: 'app-checklist',
   template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button defaultHref="/"></ion-back-button>
-        </ion-buttons>
-        <ion-title *ngIf="checklist$ | async as checklist">
-          {{ checklist.title }}
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ng-container
+      *ngIf="{
+        checklist: (checklist$ | async)!,
+        formModalIsOpen: (formModalIsOpen$ | async)!
+      } as vm"
+    >
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+          </ion-buttons>
+          <ion-title>
+            {{ vm.checklist.title }}
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
 
-    <ion-content> </ion-content>
+      <ion-content> </ion-content>
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,7 +49,7 @@ export class ChecklistComponent {
   constructor(
     private route: ActivatedRoute,
     private checklistService: ChecklistService,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {}
 }
 
