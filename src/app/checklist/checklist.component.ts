@@ -10,6 +10,7 @@ import { ChecklistService } from '../shared/data-access/checklist.service';
 import { Checklist } from '../shared/interfaces/checklist';
 import { FormModalComponentModule } from '../shared/ui/form-modal.component';
 import { ChecklistItemService } from './data-access/checklist-item.service';
+import { ChecklistItemListComponentModule } from './ui/checklist-item-list.component';
 
 @Component({
   selector: 'app-checklist',
@@ -32,6 +33,9 @@ import { ChecklistItemService } from './data-access/checklist-item.service';
       </ion-header>
 
       <ion-content>
+        <app-checklist-item-list
+          [checklistItems]="vm.items"
+        ></app-checklist-item-list>
         <ion-modal
           [isOpen]="vm.formModalIsOpen"
           [canDismiss]="true"
@@ -105,6 +109,7 @@ export class ChecklistComponent {
       },
     ]),
     FormModalComponentModule,
+    ChecklistItemListComponentModule,
   ],
 })
 export class ChecklistComponentModule {}
