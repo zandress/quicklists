@@ -5,6 +5,7 @@ import {
   Input,
   NgModule,
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Checklist } from 'src/app/shared/interfaces/checklist';
 
@@ -30,7 +31,7 @@ export class ChecklistListComponent {
 }
 
 @NgModule({
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, RouterModule],
   declarations: [ChecklistListComponent],
   exports: [ChecklistListComponent],
 })
