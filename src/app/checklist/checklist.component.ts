@@ -8,6 +8,7 @@ import { switchMap } from 'rxjs/operators';
 import { __param } from 'tslib';
 import { ChecklistService } from '../shared/data-access/checklist.service';
 import { FormModalComponentModule } from "../shared/ui/form-modal.component";
+import { ChecklistItemService } from './data-access/checklist-item.service';
 
 @Component({
   selector: 'app-checklist',
@@ -63,9 +64,17 @@ export class ChecklistComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private fb: FormBuilder,
     private checklistService: ChecklistService,
-    private fb: FormBuilder
+    private checklistItemService: ChecklistItemService,
   ) {}
+
+  addChecklistItem(checklistId: string) {
+    this.checklistItemService.add(
+      this.checklistItemForm.getRawValue(),
+      checklistId
+    );
+  }
 }
 
 @NgModule({
