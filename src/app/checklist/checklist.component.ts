@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, NgModule } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
-import { switchMap } from "rxjs";
+import { switchMap } from "rxjs/operators";
 import { __param } from "tslib";
 import { ChecklistService } from "../shared/data-access/checklist.service";
 
