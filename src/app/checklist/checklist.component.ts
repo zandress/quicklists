@@ -27,6 +27,11 @@ import { ChecklistItemService } from './data-access/checklist-item.service';
           <ion-title>
             {{ vm.checklist.title }}
           </ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="formModalIsOpen$.next(true)">
+              <ion-icon name="add" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
