@@ -1,17 +1,23 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { Checklist } from "../interfaces/checklist";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { Checklist } from '../interfaces/checklist';
 
-
-@Injectable
-({
+@Injectable({
   providedIn: 'root',
 })
 export class ChecklistService {
   private checklists$ = new BehaviorSubject<Checklist[]>([]);
 
   getChecklists() {
-    return this.checklists$.asObservable()
+    return this.checklists$.asObservable();
+  }
+
+  getChecklistById(id: string) {
+    return this.getChecklists().pipe(
+      filter((checklists) => checklists.length > 0), //don't emit if checklists haven't loaded yet
+      map((checklists) => checklists.find((checklist) => checklist.id === id))
+    );
   }
 
   add(checklist: Pick<Checklist, 'title'>) {
