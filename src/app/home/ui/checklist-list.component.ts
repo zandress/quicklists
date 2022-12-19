@@ -13,7 +13,12 @@ import { Checklist } from 'src/app/shared/interfaces/checklist';
   selector: 'app-checklist-list',
   template: `
     <ion-list lines="none">
-      <ion-item *ngFor="let checklist of checklists; trackBy: trackByFn">
+      <ion-item
+        *ngFor="let checklist of checklists; trackBy: trackByFn"
+        button
+        routerLink="/checklist/{{ checklist.id }}"
+        routerDirection="forward"
+      >
         <ion-label>{{ checklist.title }}</ion-label>
       </ion-item>
     </ion-list>
