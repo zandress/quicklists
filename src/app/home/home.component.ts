@@ -26,7 +26,7 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
         *ngIf="checklist$ | async as checklists"
         [checklists]="checklists"
         (delete)="deleteChecklist($event)"
-        ></app-checklist-list>
+      ></app-checklist-list>
       <ion-modal
         [isOpen]="formModalIsOpen$ | async"
         [canDismiss]="true"
@@ -45,7 +45,7 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-checklist$ = this.checklistService.getChecklists();
+  checklist$ = this.checklistService.getChecklists();
 
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
 
