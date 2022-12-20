@@ -25,6 +25,9 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
             {{ vm.checklist.title }}
           </ion-title>
           <ion-buttons slot="end">
+            <ion-button (click)="resetChecklistItems(vm.checklist.id)">
+              <ion-icon name="refresh" slot="icon-only"></ion-icon>
+            </ion-button>
             <ion-button (click)="formModalIsOpen$.next(true)">
               <ion-icon name="add" slot="icon-only"></ion-icon>
             </ion-button>
