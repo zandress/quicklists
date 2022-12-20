@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, shareReplay, take, tap } from 'rxjs/operators';
 import { Checklist } from '../interfaces/checklist';
 import { StorageService } from './storage.service';
 
@@ -8,20 +8,27 @@ import { StorageService } from './storage.service';
   providedIn: 'root',
 })
 export class ChecklistService {
+  // This is our data source where we will emit the latest state
   private checklists$ = new BehaviorSubject<Checklist[]>([]);
 
-  constructor( private storageService: StorageService) {}
+  // This is what we will use to consume the checklist data throughout the app
+  private sharedChecklists$: Observable<Checklist[]> = this.checklists$.pipe(
+    // Trigger a save whenever this stream emits new data
+    tap((checklists) => this.storageService.saveChecklists(checklists)),
+    // Share this stream with multiple subscribers, instead of creating a new one for each
+    shareReplay(1)
+  );
+
+  constructor(private storageService: StorageService) {}
 
   load() {
-    this.storageService.loadChecklist$
-    .pipe(take(1))
-    .subscribe((checklists) => {
+    this.storageService.loadChecklist$.pipe(take(1)).subscribe((checklists) => {
       this.checklists$.next(checklists);
     });
   }
 
   getChecklists() {
-    return this.checklists$.asObservable();
+    return this.sharedChecklists$;
   }
 
   getChecklistById(id: string) {
