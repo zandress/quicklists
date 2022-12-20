@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { ChecklistService } from '../shared/data-access/checklist.service';
+import { Checklist } from '../shared/interfaces/checklist';
 import { FormModalComponentModule } from '../shared/ui/form-modal.component';
 import { ChecklistListComponentModule } from './ui/checklist-list.component';
 
@@ -26,17 +27,30 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
         *ngIf="checklist$ | async as checklists"
         [checklists]="checklists"
         (delete)="deleteChecklist($event)"
+        (edit)="openEditModal($event)"
       ></app-checklist-list>
       <ion-modal
-        [isOpen]="formModalIsOpen$ | async"
+        *ngIf="{
+          checklistIdBeingEdited: checklistIdBeingEdited$ | async,
+          isOpen: formModalIsOpen$ | async
+        } as vm"
+        [isOpen]="vm.isOpen"
         [canDismiss]="true"
-        (ionModalDidDismiss)="formModalIsOpen$.next(false)"
+        (ionModalDidDismiss)="
+          formModalIsOpen$.next(false); checklistIdBeingEdited$.next(null)
+        "
       >
-        <ng-template>
+      <ng-template>
           <app-form-modal
-            title="Create checklist"
+            [title]="
+              vm.checklistIdBeingEdited ? 'Edit checklist' : 'Create checklist'
+            "
             [formGroup]="checklistForm"
-            (save)="addChecklist()"
+            (save)="
+              vm.checklistIdBeingEdited
+                ? editChecklist(vm.checklistIdBeingEdited)
+                : addChecklist()
+            "
           ></app-form-modal>
         </ng-template>
       </ion-modal>
@@ -48,6 +62,8 @@ export class HomeComponent {
   checklist$ = this.checklistService.getChecklists();
 
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
+
+  checklistIdBeingEdited$ = new BehaviorSubject<string | null>(null);
 
   checklistForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
@@ -64,6 +80,18 @@ export class HomeComponent {
 
   deleteChecklist(id: string) {
     this.checklistService.remove(id);
+  }
+
+  editChecklist(checklistId: string) {
+    this.checklistService.update(checklistId, this.checklistForm.getRawValue());
+  }
+
+  openEditModal(checklist: Checklist) {
+    this.checklistForm.patchValue({
+      title: checklist.title,
+    });
+    this.checklistIdBeingEdited$.next(checklist.id);
+    this.formModalIsOpen$.next(true);
   }
 }
 
