@@ -4,9 +4,11 @@ import {
   Component,
   Input,
   NgModule,
+  Output,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
+import { EventEmitter } from 'stream';
 
 
 @Component({
@@ -23,6 +25,7 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
 })
 export class ChecklistItemListComponent {
   @Input() checklistItems!: ChecklistItem[];
+  @Output() toggle = new EventEmitter<string>();
 
   trackByFn(index: number, item: ChecklistItem) {
     return item.id;
