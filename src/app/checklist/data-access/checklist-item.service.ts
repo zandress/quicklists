@@ -28,4 +28,12 @@ export class ChecklistItemService {
 
     this.checklistItems$.next([...this.checklistItems$.value, newItem]);
   }
+
+  toggle(itemId: string) {
+    const newItems = this.checklistItems$.value.map((item) =>
+      item.id === itemId ? { ...item, checked: !item.checked } : item
+    );
+
+    this.checklistItems$.next(newItems);
+  }
 }
