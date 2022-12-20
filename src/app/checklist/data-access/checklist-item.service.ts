@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+import { StorageService } from 'src/app/shared/data-access/storage.service';
 import {
   AddChecklistItem,
   ChecklistItem,
@@ -11,6 +12,16 @@ import {
 })
 export class ChecklistItemService {
   private checklistItems$ = new BehaviorSubject<ChecklistItem[]>([]);
+
+  constructor(private storageService: StorageService) {}
+
+  load() {
+    this.storageService.loadChecklistItems$
+    .pipe(take(1))
+    .subscribe((checklistItems) => {
+      this.checklistItems$.next(checklistItems);
+    });
+  }
 
   getItemsByChecklistId(checklistId: string) {
     return this.checklistItems$.pipe(
