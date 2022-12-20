@@ -61,7 +61,7 @@ export class ChecklistService {
     this.checklists$.next(modifiedChecklists);
   }
 
-  update(id: string, editedData: AddChecklist) {
+  update(id: string, editedData: Checklist) {
     const modifiedChecklists = this.checklists$.value.map((checklist) =>
       checklist.id === id
         ? { ...checklist, title: editedData.title }
