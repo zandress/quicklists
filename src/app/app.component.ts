@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, OnInit } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   PreloadAllModules,
@@ -10,6 +10,8 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import * as cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { ChecklistItemService } from './checklist/data-access/checklist-item.service';
+import { ChecklistService } from './shared/data-access/checklist.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,17 @@ import * as cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(
+    private checklistService: ChecklistService,
+    private checklistItemService: ChecklistItemService
+  ) {}
+
+  ngOnInit() {
+    this.checklistService.load();
+    this.checklistItemService.load();
+  }
+}
 
 @NgModule({
   declarations: [AppComponent],
