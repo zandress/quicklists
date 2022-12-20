@@ -30,7 +30,19 @@ export class StorageService {
 
   constructor(private ionicStorage: Storage) {}
 
-  saveChecklists(checklist: Checklist[]) {}
+  saveChecklists(checklists: Checklist[]) {
+    if (this.#checklistHasLoaded) {
+      this.storage$.pipe(take(1)).subscribe((storage) => {
+        storage.set('checklists', checklists);
+      });
+    }
+  }
 
-  saveChecklistItems(checklistItems: ChecklistItem[]) {}
+  saveChecklistItems(checklistItems: ChecklistItem[]) {
+    if (this.#checklistItemsHasLoaded) {
+      this.storage$.pipe(take(1)).subscribe((storage) => {
+        storage.set('checklistItems', checklistItems);
+      });
+    }
+  }
 }
