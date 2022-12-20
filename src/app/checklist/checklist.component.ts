@@ -95,6 +95,10 @@ export class ChecklistComponent {
       checklistId
     );
   }
+
+  toggleChecklistItem(itemId: string) {
+    this.checklistItemService.toggle(itemId);
+  }
 }
 
 @NgModule({
