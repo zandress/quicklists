@@ -7,6 +7,9 @@ import {
 } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { Drivers } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import * as cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +50,14 @@ export class AppComponent {}
       ],
       { preloadingStrategy: PreloadAllModules }
     ),
+    IonicStorageModule.forRoot({
+      driverOrder: [
+        //eslint-disable-next-line no-underscore-dangle
+        cordovaSQLiteDriver._driver,
+        Drivers.IndexedDB,
+        Drivers.LocalStorage,
+      ],
+    }),
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
