@@ -8,7 +8,6 @@ import {
   Output,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { Checklist } from 'src/app/shared/interfaces/checklist';
 import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
 
 @Component({
