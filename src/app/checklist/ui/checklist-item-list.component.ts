@@ -15,7 +15,10 @@ import { EventEmitter } from 'stream';
   selector: 'app-checklist-item-list',
   template: `
     <ion-list lines="none">
-      <ion-item *ngFor="let item of checklistItems; trackBy: trackByFn">
+      <ion-item
+        *ngFor="let item of checklistItems; trackBy: trackByFn"
+        (click)="toggle.emit(item.id)"
+        >
         <ion-label>{{ item.title }}</ion-label>
         <ion-checkbox slot="end" [checked]="item.checked"></ion-checkbox>
       </ion-item>
