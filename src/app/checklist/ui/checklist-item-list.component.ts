@@ -15,6 +15,7 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
     <ion-list lines="none">
       <ion-item *ngFor="let item of checklistItems; trackBy: trackByFn">
         <ion-label>{{ item.title }}</ion-label>
+        <ion-checkbox slot="end" [checked]="item.checked"></ion-checkbox>
       </ion-item>
     </ion-list>
   `,
