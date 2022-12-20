@@ -35,6 +35,7 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
       <ion-content>
         <app-checklist-item-list
           [checklistItems]="vm.items"
+          (toggle)="toggleChecklistItem($event)"
         ></app-checklist-item-list>
         <ion-modal
           [isOpen]="vm.formModalIsOpen"
