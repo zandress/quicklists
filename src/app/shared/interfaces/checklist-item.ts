@@ -1,5 +1,3 @@
-import { ChecklistListComponentModule } from "src/app/home/ui/checklist-list.component";
-
 export interface ChecklistItem {
   id: string;
   checklistId: string;
