@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, NgModule, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -60,8 +60,6 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChecklistComponent {
-  @Output() delete = new EventEmitter<string>();
-  @Output() edit = new EventEmitter<Checklist>();
 
   checklistItemForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
