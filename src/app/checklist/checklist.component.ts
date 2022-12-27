@@ -7,7 +7,12 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
+import {
+  AlertController,
+  IonContent,
+  IonicModule,
+  IonRouterOutlet,
+} from '@ionic/angular';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { __param } from 'tslib';
@@ -128,7 +133,8 @@ export class ChecklistComponent {
     private fb: FormBuilder,
     private checklistService: ChecklistService,
     private checklistItemService: ChecklistItemService,
-    public routerOutlet: IonRouterOutlet
+    public routerOutlet: IonRouterOutlet,
+    private alertCtrl: AlertController
   ) {}
 
   addChecklistItem(checklistId: string) {
@@ -146,8 +152,28 @@ export class ChecklistComponent {
     this.checklistItemService.reset(checklistId);
   }
 
-  deleteChecklistItem(id: string) {
-    this.checklistItemService.remove(id);
+  async deleteChecklistItem(id: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Are you sure?',
+      subHeader: 'This will delete this item on this checklist',
+      buttons: [
+        {
+          text: 'Delete',
+          cssClass: 'confirm-delete-button',
+          role: 'destructive',
+          handler: () => {
+            this.checklistItemService.remove(id);
+          },
+        },
+        {
+          text: 'Cancel',
+          cssClass: 'cancel-delete-button',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    alert.present();
   }
 
   editChecklistItem(checklistItemId: string) {
