@@ -2,5 +2,6 @@
     "cSpell.words": [
         "cordovasqlitedriver",
         "localforage"
-    ]
+    ],
+    "files.autoSave": "afterDelay"
 }

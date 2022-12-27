@@ -17,17 +17,17 @@ export class ChecklistItemService {
 
   load() {
     this.storageService.loadChecklistItems$
-    .pipe(take(1))
-    .subscribe((checklistItems) => {
-      this.checklistItems$.next(checklistItems);
-    });
+      .pipe(take(1))
+      .subscribe((checklistItems) => {
+        this.checklistItems$.next(checklistItems);
+      });
   }
 
   getItemsByChecklistId(checklistId: string) {
     return this.checklistItems$.pipe(
       map((items) => items.filter((item) => item.checklistId === checklistId)),
       tap(() =>
-      this.storageService.saveChecklistItems(this.checklistItems$.value)
+        this.storageService.saveChecklistItems(this.checklistItems$.value)
       )
     );
   }

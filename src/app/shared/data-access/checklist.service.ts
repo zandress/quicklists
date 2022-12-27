@@ -26,8 +26,10 @@ export class ChecklistService {
   ) {}
 
   load() {
-    this.storageService.loadChecklist$.pipe(take(1)).subscribe((checklists) => {
-      this.checklists$.next(checklists);
+    this.storageService.loadChecklist$
+      .pipe(take(1))
+      .subscribe((checklists) => {
+        this.checklists$.next(checklists);
     });
   }
 
