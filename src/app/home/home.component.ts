@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
@@ -40,7 +40,7 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
           formModalIsOpen$.next(false); checklistIdBeingEdited$.next(null)
         "
       >
-        <ng-template>
+      <ng-template>
           <app-form-modal
             [title]="
               vm.checklistIdBeingEdited ? 'Edit checklist' : 'Create checklist'
@@ -59,10 +59,11 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  formModalIsOpen$ = new BehaviorSubject<boolean>(false);
-  checklistIdBeingEdited$ = new BehaviorSubject<string | null>(null);
-
   checklist$ = this.checklistService.getChecklists();
+
+  formModalIsOpen$ = new BehaviorSubject<boolean>(false);
+
+  checklistIdBeingEdited$ = new BehaviorSubject<string | null>(null);
 
   checklistForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
@@ -77,6 +78,14 @@ export class HomeComponent {
     this.checklistService.add(this.checklistForm.getRawValue());
   }
 
+  deleteChecklist(id: string) {
+    this.checklistService.remove(id);
+  }
+
+  editChecklist(checklistId: string) {
+    this.checklistService.update(checklistId, this.checklistForm.getRawValue());
+  }
+
   openEditModal(checklist: Checklist) {
     this.checklistForm.patchValue({
       title: checklist.title,
@@ -84,29 +93,20 @@ export class HomeComponent {
     this.checklistIdBeingEdited$.next(checklist.id);
     this.formModalIsOpen$.next(true);
   }
-
-  editChecklist(checklistId: string) {
-    this.checklistService.update(checklistId, this.checklistForm.getRawValue());
-  }
-
-  deleteChecklist(id: string) {
-    this.checklistService.remove(id);
-  }
 }
 
 @NgModule({
   imports: [
     CommonModule,
+    IonicModule,
+    FormModalComponentModule,
+    ChecklistListComponentModule,
     RouterModule.forChild([
       {
         path: '',
         component: HomeComponent,
       },
     ]),
-    ReactiveFormsModule,
-    IonicModule,
-    FormModalComponentModule,
-    ChecklistListComponentModule,
   ],
   declarations: [HomeComponent],
 })
