@@ -1,8 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  NgModule,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AlertController, IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
+import {
+  AlertController,
+  IonContent,
+  IonicModule,
+  IonRouterOutlet,
+} from '@ionic/angular';
 import { BehaviorSubject, tap } from 'rxjs';
 import { ChecklistService } from '../shared/data-access/checklist.service';
 import { Checklist } from '../shared/interfaces/checklist';
@@ -13,16 +23,26 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
   selector: 'app-home',
   template: `
     <ion-header>
-      <ion-toolbar>
-        <ion-title> Home </ion-title>
+      <ion-toolbar color="success">
+        <ion-title>
+          <img src="/../assets/logo.svg" />
+        </ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="formModalIsOpen$.next(true)">
+          <ion-button
+            data-test="add-checklist-button"
+            (click)="formModalIsOpen$.next(true)"
+          >
             <ion-icon name="add" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content>
+    <ion-content [fullscreen]="true">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title color="light" size="large">Your lists</ion-title>
+        </ion-toolbar>
+      </ion-header>
       <app-checklist-list
         *ngIf="checklist$ | async as checklists"
         [checklists]="checklists"
@@ -82,7 +102,7 @@ export class HomeComponent {
     private fb: FormBuilder,
     private checklistService: ChecklistService,
     public routerOutlet: IonRouterOutlet,
-    private alertCtrl: AlertController,
+    private alertCtrl: AlertController
   ) {}
 
   addChecklist() {
