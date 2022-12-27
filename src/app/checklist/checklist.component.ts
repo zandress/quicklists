@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { __param } from 'tslib';
 import { ChecklistService } from '../shared/data-access/checklist.service';
 import { Checklist } from '../shared/interfaces/checklist';
@@ -50,6 +50,7 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
           (ionModalDidDismiss)="
             checklistItemIdBeingEdited$.next(null); formModalIsOpen$.next(false)
           "
+          [presentingElement]="routerOutlet.nativeEl"
         >
           <ng-template>
             <app-form-modal
@@ -71,6 +72,8 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChecklistComponent {
+  @ViewChild(IonContent) ionContent!: IonContent;
+
   checklistItemIdBeingEdited$ = new BehaviorSubject<string | null>(null);
 
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
@@ -85,9 +88,11 @@ export class ChecklistComponent {
         this.checklistService
           .getChecklistById(params.get('id') as string)
           .pipe(filter((checklist): checklist is Checklist => !!checklist)),
-        this.checklistItemService.getItemsByChecklistId(
-          params.get('id') as string
-        ),
+        this.checklistItemService
+          .getItemsByChecklistId(params.get('id') as string)
+          .pipe(
+            tap(() => setTimeout(() => this.ionContent.scrollToBottom(200), 0))
+          ),
       ])
     )
   );
@@ -111,7 +116,8 @@ export class ChecklistComponent {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private checklistService: ChecklistService,
-    private checklistItemService: ChecklistItemService
+    private checklistItemService: ChecklistItemService,
+    public routerOutlet: IonRouterOutlet,
   ) {}
 
   addChecklistItem(checklistId: string) {

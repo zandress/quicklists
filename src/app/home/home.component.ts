@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
+import { IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
+import { BehaviorSubject, tap } from 'rxjs';
 import { ChecklistService } from '../shared/data-access/checklist.service';
 import { Checklist } from '../shared/interfaces/checklist';
 import { FormModalComponentModule } from '../shared/ui/form-modal.component';
@@ -39,6 +39,7 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
         (ionModalDidDismiss)="
           formModalIsOpen$.next(false); checklistIdBeingEdited$.next(null)
         "
+        [presentingElement]="routerOutlet.nativeEl"
       >
         <ng-template>
           <app-form-modal
@@ -59,7 +60,15 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  checklist$ = this.checklistService.getChecklists();
+  @ViewChild(IonContent) ionContent!: IonContent;
+
+  checklist$ = this.checklistService.getChecklists().pipe(
+    tap(() => {
+      setTimeout(() => {
+        this.ionContent.scrollToBottom(200);
+      }, 0);
+    })
+  );
 
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
 
@@ -71,7 +80,8 @@ export class HomeComponent {
 
   constructor(
     private fb: FormBuilder,
-    private checklistService: ChecklistService
+    private checklistService: ChecklistService,
+    public routerOutlet: IonRouterOutlet,
   ) {}
 
   addChecklist() {
