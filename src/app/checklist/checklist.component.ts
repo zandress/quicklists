@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  NgModule,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
@@ -16,12 +21,11 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
 @Component({
   selector: 'app-checklist',
   template: `
-    <ng-container 
-      *ngIf="vm$ | async as vm">
-      <ion-header>
-        <ion-toolbar>
+    <ng-container *ngIf="vm$ | async as vm">
+      <ion-header class="ion-no-border">
+        <ion-toolbar color="success">
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-back-button color="light" defaultHref="/"></ion-back-button>
           </ion-buttons>
           <ion-title>
             {{ vm.checklist.title }}
@@ -54,7 +58,7 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
         >
           <ng-template>
             <app-form-modal
-              title="
+              [title]="
                 vm.checklistItemIdBeingEdited ? 'Edit item' : 'Create item'
               "
               [formGroup]="checklistItemForm"
@@ -69,6 +73,13 @@ import { ChecklistItemListComponentModule } from './ui/checklist-item-list.compo
       </ion-content>
     </ng-container>
   `,
+  styles: [
+    `
+      ion-header {
+        background-color: var(--ion-color-primary);
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChecklistComponent {
@@ -117,7 +128,7 @@ export class ChecklistComponent {
     private fb: FormBuilder,
     private checklistService: ChecklistService,
     private checklistItemService: ChecklistItemService,
-    public routerOutlet: IonRouterOutlet,
+    public routerOutlet: IonRouterOutlet
   ) {}
 
   addChecklistItem(checklistId: string) {

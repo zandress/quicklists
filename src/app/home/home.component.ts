@@ -63,7 +63,7 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
       >
         <ng-template>
           <app-form-modal
-            title="
+            [title]="
               vm.checklistIdBeingEdited ? 'Edit checklist' : 'Create checklist'
             "
             [formGroup]="checklistForm"

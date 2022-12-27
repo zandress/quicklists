@@ -19,10 +19,7 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
         side="end"
         *ngFor="let item of checklistItems; trackBy: trackByFn"
       >
-        <ion-item
-          (click)="toggle.emit(item.id)"
-          color="success"
-        >
+        <ion-item (click)="toggle.emit(item.id)" color="success">
           <ion-label>{{ item.title }}</ion-label>
           <ion-checkbox
             color="light"
@@ -32,10 +29,16 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
         </ion-item>
 
         <ion-item-options>
-          <ion-item-option color="light" (click)="edit.emit(item); closeItems()">
+          <ion-item-option
+            color="light"
+            (click)="edit.emit(item); closeItems()"
+          >
             <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="danger" (click)="delete.emit(item.id); closeItems()">
+          <ion-item-option
+            color="danger"
+            (click)="delete.emit(item.id); closeItems()"
+          >
             <ion-icon name="trash" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>
@@ -50,6 +53,15 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
       </ion-card>
     </ion-list>
   `,
+  styles: [
+    `
+      ion-label {
+        font-weight: bold;
+        margin: 20px;
+        white-space: normal;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChecklistItemListComponent {
