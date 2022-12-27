@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
+import { AlertController, IonContent, IonicModule, IonRouterOutlet } from '@ionic/angular';
 import { BehaviorSubject, tap } from 'rxjs';
 import { ChecklistService } from '../shared/data-access/checklist.service';
 import { Checklist } from '../shared/interfaces/checklist';
@@ -82,14 +82,35 @@ export class HomeComponent {
     private fb: FormBuilder,
     private checklistService: ChecklistService,
     public routerOutlet: IonRouterOutlet,
+    private alertCtrl: AlertController,
   ) {}
 
   addChecklist() {
     this.checklistService.add(this.checklistForm.getRawValue());
   }
 
-  deleteChecklist(id: string) {
-    this.checklistService.remove(id);
+  async deleteChecklist(id: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Are you sure?',
+      subHeader: 'This will also delete all of the items for this checklist',
+      buttons: [
+        {
+          text: 'Delete',
+          cssClass: 'confirm-delete-button',
+          role: 'destructive',
+          handler: () => {
+            this.checklistService.remove(id);
+          },
+        },
+        {
+          text: 'Cancel',
+          cssClass: 'cancel-delete-button',
+          role: 'cancel',
+        },
+      ],
+    });
+
+    alert.present();
   }
 
   editChecklist(checklistId: string) {
