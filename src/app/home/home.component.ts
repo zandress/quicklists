@@ -45,9 +45,11 @@ import { ChecklistListComponentModule } from './ui/checklist-list.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-checklist$ = this.checklistService.getChecklists();
+  checklist$ = this.checklistService.getChecklists();
 
   formModalIsOpen$ = new BehaviorSubject<boolean>(false);
+
+  checklistIdBeingEdited$ = new BehaviorSubject<string | null>(null);
 
   checklistForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
