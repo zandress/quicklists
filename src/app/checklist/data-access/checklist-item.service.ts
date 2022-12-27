@@ -5,7 +5,7 @@ import { StorageService } from 'src/app/shared/data-access/storage.service';
 import {
   AddChecklistItem,
   ChecklistItem,
-} from 'src/app/shared/interfaces/checklist-item';
+} from '../../shared/interfaces/checklist-item';
 
 @Injectable({
   providedIn: 'root',
@@ -53,7 +53,7 @@ export class ChecklistItemService {
 
   reset(checklistId: string) {
     const newItems = this.checklistItems$.value.map((item) =>
-    item.checklistId === checklistId ? { ...item, checked: false } : item
+      item.checklistId === checklistId ? { ...item, checked: false } : item
     );
 
     this.checklistItems$.next(newItems);
@@ -63,7 +63,6 @@ export class ChecklistItemService {
     const newItems = this.checklistItems$.value.map((item) =>
       item.id === id ? { ...item, title: editedItem.title } : item
     );
-
     this.checklistItems$.next(newItems);
   }
 
@@ -71,15 +70,13 @@ export class ChecklistItemService {
     const modifiedItems = this.checklistItems$.value.filter(
       (item) => item.id !== id
     );
-
     this.checklistItems$.next(modifiedItems);
   }
-
+  
   removeAllItemsForChecklist(checklistId: string) {
     const modifiedItems = this.checklistItems$.value.filter(
       (item) => item.checklistId !== checklistId
     );
-
     this.checklistItems$.next(modifiedItems);
   }
 }
