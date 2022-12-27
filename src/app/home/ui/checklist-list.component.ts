@@ -19,7 +19,7 @@ import { Checklist } from 'src/app/shared/interfaces/checklist';
         *ngFor="let checklist of checklists; trackBy: trackByFn"
       >
         <ion-item
-          *ngFor="let checklist of checklists; trackBy: trackByFn"
+          data-test="checklist-item"
           button
           routerLink="/checklist/{{ checklist.id }}"
           routerDirection="forward"

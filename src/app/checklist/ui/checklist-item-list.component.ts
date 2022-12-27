@@ -18,7 +18,7 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
         side="end"
         *ngFor="let item of checklistItems; trackBy: trackByFn"
       >
-        <ion-item (click)="toggle.emit(item.id)">
+        <ion-item (click)="toggle.emit(item.id)" color="success">
           <ion-label>{{ item.title }}</ion-label>
           <ion-checkbox
             color="light"
@@ -27,7 +27,7 @@ import { ChecklistItem } from 'src/app/shared/interfaces/checklist-item';
           ></ion-checkbox>
         </ion-item>
 
-        <ion-item-options side="end">
+        <ion-item-options>
           <ion-item-option color="light" (click)="edit.emit(item)">
             <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
           </ion-item-option>
